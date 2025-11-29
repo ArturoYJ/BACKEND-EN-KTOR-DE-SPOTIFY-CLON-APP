@@ -9,4 +9,21 @@ import com.example.dto.Song
 
 interface DAOFacade {
 
+        suspend fun allArtists(): List<Artist>
+        suspend fun artist(id: Int): Artist?
+        suspend fun addNewArtist(artist: NewArtist): Artist?
+        suspend fun deleteArtist(id: Int): Boolean
+        suspend fun editArtist(id: Int, artist: NewArtist): Boolean
+
+        suspend fun allAlbums(): List<Album>
+        suspend fun albumsByArtist(artistId: Int): List<Album>
+        suspend fun addNewAlbum(album: NewAlbum): Album?
+        suspend fun deleteAlbum(id: Int): Boolean
+        suspend fun editAlbum(id: Int, album: NewAlbum): Boolean
+
+        suspend fun allSongs(): List<Song>
+        suspend fun songsByAlbum(albumId: Int): List<Song>
+        suspend fun addNewSong(song: NewSong): Song?
+        suspend fun deleteSong(id: Int): Boolean
+        suspend fun editSong(id: Int, song: NewSong): Boolean
     }

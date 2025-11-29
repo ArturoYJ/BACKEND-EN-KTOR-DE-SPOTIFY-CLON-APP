@@ -1,7 +1,6 @@
-package com.example.models
+package com.example.domain.models
 
 import org.jetbrains.exposed.sql.Table
-import kotlinx.serialization.Serializable
 
 
 object Artists : Table("artists") {

@@ -57,7 +57,6 @@ fun Application.configureRouting(dao: DAOFacade) {
             }
         }
 
-        // endpoint albums
         route("/albums") {
             get { call.respond(dao.allAlbums()) }
             post {
@@ -91,7 +90,6 @@ fun Application.configureRouting(dao: DAOFacade) {
             }
         }
 
-        // endpoint canciones
         route("/songs") {
             get { call.respond(dao.allSongs()) }
             post {

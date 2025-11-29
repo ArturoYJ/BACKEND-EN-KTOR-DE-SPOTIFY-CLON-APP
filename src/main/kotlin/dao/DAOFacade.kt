@@ -1,28 +1,12 @@
 package com.example.dao
 
-import com.example.models.*
+import com.example.domain.models.Albums
+import com.example.domain.models.Artists
+import com.example.domain.models.Songs
+import com.example.domain.ports.DAOFacade
+import com.example.dto.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-
-interface DAOFacade {
-    suspend fun allArtists(): List<Artist>
-    suspend fun artist(id: Int): Artist?
-    suspend fun addNewArtist(artist: NewArtist): Artist?
-    suspend fun deleteArtist(id: Int): Boolean
-    suspend fun editArtist(id: Int, artist: NewArtist): Boolean
-
-    suspend fun allAlbums(): List<Album>
-    suspend fun albumsByArtist(artistId: Int): List<Album>
-    suspend fun addNewAlbum(album: NewAlbum): Album?
-    suspend fun deleteAlbum(id: Int): Boolean
-    suspend fun editAlbum(id: Int, album: NewAlbum): Boolean
-
-    suspend fun allSongs(): List<Song>
-    suspend fun songsByAlbum(albumId: Int): List<Song>
-    suspend fun addNewSong(song: NewSong): Song?
-    suspend fun deleteSong(id: Int): Boolean
-    suspend fun editSong(id: Int, song: NewSong): Boolean
-}
 
 class DAOFacadeImpl : DAOFacade {
 
@@ -33,8 +17,6 @@ class DAOFacadeImpl : DAOFacade {
     private fun rowToSong(row: ResultRow) = Song(
         id = row[Songs.id], title = row[Songs.title], durationSeconds = row[Songs.durationSeconds], songUrl = row[Songs.songUrl], albumId = row[Songs.albumId])
 
-
-    // ARTISTS
     override suspend fun allArtists(): List<Artist> = DatabaseFactory.dbQuery {
         Artists.selectAll().map(::rowToArtist)
     }
@@ -61,8 +43,6 @@ class DAOFacadeImpl : DAOFacade {
         } > 0
     }
 
-
-    // ALBUMS
     override suspend fun allAlbums(): List<Album> = DatabaseFactory.dbQuery {
         Albums.selectAll().map(::rowToAlbum)
     }
@@ -91,8 +71,6 @@ class DAOFacadeImpl : DAOFacade {
         } > 0
     }
 
-
-    // SONGS
     override suspend fun allSongs(): List<Song> = DatabaseFactory.dbQuery {
         Songs.selectAll().map(::rowToSong)
     }
@@ -113,12 +91,11 @@ class DAOFacadeImpl : DAOFacade {
         Songs.deleteWhere { Songs.id eq id } > 0
     }
     override suspend fun editSong(id: Int, song: NewSong): Boolean = DatabaseFactory.dbQuery {
-        Songs.update( {Songs.id eq id} ) {
+        Songs.update( { Songs.id eq id} ) {
             it[title] = song.title
             it[durationSeconds] = song.durationSeconds
             it[songUrl] = song.songUrl
             it[albumId] = song.albumId
         } > 0
     }
-
 }
