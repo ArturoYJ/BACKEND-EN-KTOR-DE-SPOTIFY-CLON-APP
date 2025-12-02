@@ -11,7 +11,7 @@ import com.example.domain.ports.MusicRepository
 fun Application.configureRouting(dao: MusicRepository) {
     routing {
 
-        route("/artists") {
+        route("/api/artistas") {
             get { call.respond(dao.allArtists()) }
             post {
                 val form = call.receive<NewArtist>()
@@ -46,7 +46,7 @@ fun Application.configureRouting(dao: MusicRepository) {
             }
         }
 
-        route("/albums") {
+        route("/api/albumes") {
             get { call.respond(dao.allAlbums()) }
             post {
                 val form = call.receive<NewAlbum>()
@@ -76,7 +76,7 @@ fun Application.configureRouting(dao: MusicRepository) {
             }
         }
 
-        route("/songs") {
+        route("/api/tracks") {
             get { call.respond(dao.allSongs()) }
             post {
                 val form = call.receive<NewSong>()

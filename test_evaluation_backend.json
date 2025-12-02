@@ -1,0 +1,159 @@
+{
+	"info": {
+		"_postman_id": "evaluacion-backend-dgutyp",
+		"name": "Evaluación Rápida Backend - 3 Entidades",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Crear Artista (Set Variable)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.environment.set(\"current_artist_id\", jsonData.id);",
+							"pm.test(\"Status code is 201 Created\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"pm.test(\"Retorna ID\", function () {",
+							"    pm.expect(jsonData.id).to.not.be.undefined;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Artista Test Evaluador\",\n    \"genre\": \"Rock Académico\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/artistas",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"artistas"
+					]
+				}
+			}
+		},
+		{
+			"name": "2. Crear Álbum (Usa ID Artista)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.environment.set(\"current_album_id\", jsonData.id);",
+							"pm.test(\"Vinculado a Artista Correcto\", function () {",
+							"    // Verifica que el backend guardó la relación",
+							"    // Si tu backend devuelve el objeto creado, valida esto:",
+							"    // pm.expect(jsonData.artistId).to.eql(pm.environment.get(\"current_artist_id\"));",
+							"});",
+							"pm.test(\"Status code is 200 or 201\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([201, 200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Album de Prueba Automatizada\",\n    \"releaseYear\": 2024,\n    \"artistId\": {{current_artist_id}}\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/albumes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"albumes"
+					]
+				}
+			}
+		},
+		{
+			"name": "3. Crear Track (Usa ID Album)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 or 201\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([201, 200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Track Final de Calificación\",\n    \"duration\": 240,\n    \"albumId\": {{current_album_id}}\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/tracks",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"tracks"
+					]
+				}
+			}
+		},
+		{
+			"name": "4. Leer Artista con Relaciones (GET)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/artistas/{{current_artist_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"artistas",
+						"{{current_artist_id}}"
+					]
+				}
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000/api",
+			"type": "string"
+		}
+	]
+}
